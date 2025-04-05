@@ -1,6 +1,6 @@
 #include "cube3d.h"
 
-int init_game(t_game *game)
+int	init_game(t_game *game)
 {
 	game->pos_x = 3.5;
 	game->pos_y = 3.5;

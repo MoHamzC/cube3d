@@ -4,13 +4,19 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
     char	*test_map[] = {
-	"1111111",
-	"1000001",
-	"1000001",
-	"10N0001",
-	"1000001",
-	"1000001",
-	"1111111",
+	"111111111111",
+	"100000000001",
+	"100000000001",
+	"10N000000001",
+	"100000000001",
+	"100000000001",
+	"100000000001",
+	"100000000001",
+	"100000000001",
+	"100000000001",
+	"100000000001",
+	"100000000001",
+	"111111111111",
 	NULL
 };
 	if (argc != 2)
@@ -18,7 +24,6 @@ int	main(int argc, char **argv)
 		printf("Usage: %s <map_file.cub>\n", argv[0]);
 		return (1);
 	}
-	/* Récupération de la map via le parsing */
 	//game.map = parse_cub(argv[1]);
 	game.map = test_map;
     if (!game.map)

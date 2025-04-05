@@ -4,7 +4,7 @@ mlx_texture_t	*load_texture(mlx_t *mlx, char *path)
 {
 	mlx_texture_t	*texture;
 
-	(void)mlx;  /* Le paramètre n'est pas utilisé ici */
+	(void)mlx;
 	texture = (mlx_texture_t *)mlx_load_xpm42(path);
 	if (!texture)
 	{

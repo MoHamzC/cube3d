@@ -3,6 +3,9 @@
         "cube3d.h": "c",
         "mlx42.h": "c",
         "iterator": "c",
-        "__node_handle": "c"
+        "__node_handle": "c",
+        "cstdint": "c",
+        "random": "c",
+        "algorithm": "c"
     }
 }
