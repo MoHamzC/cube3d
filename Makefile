@@ -8,6 +8,7 @@ SRCS =	src/main.c \
 		src/graphics/textures.c \
 		src/movements.c \
 		src/update.c \
+		src/set_orientation.c \
 
 OBJS = $(SRCS:.c=.o)
 

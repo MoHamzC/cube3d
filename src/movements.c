@@ -27,7 +27,7 @@ void	move_backward(t_game *game)
 		game->pos_y = new_y;
 }
 
-void	rotate_left(t_game *game)
+void	rotate_right(t_game *game)
 {
 	double	old_dir_x;
 	double	old_plane_x;
@@ -44,7 +44,7 @@ void	rotate_left(t_game *game)
 		* cos(game->rot_speed);
 }
 
-void	rotate_right(t_game *game)
+void	rotate_left(t_game *game)
 {
 	double	old_dir_x;
 	double	old_plane_x;

@@ -2,25 +2,23 @@
 
 int	init_game(t_game *game)
 {
-	game->pos_x = 3.5;
-	game->pos_y = 3.5;
-	game->dir_x = -1.0;
-	game->dir_y = 0.0;
-	game->plane_x = 0.0;
-	game->plane_y = 0.66;
-	game->move_speed = 0.1;
-	game->rot_speed = 0.1;
-	game->mlx = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "Cube3D", false);
-	if (!game->mlx)
-	{
-		printf("Erreur d'initialisation MLX42\n");
-		return (1);
-	}
+	game->move_speed = 0.05;
+	game->rot_speed = 0.03;
+	game->floor_color = 0x303030;
+	game->ceiling_color = 0x87CEEB;
+	game->mlx = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D", true);
 	game->img = mlx_new_image(game->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-	if (!game->img)
-	{
-		printf("Erreur de création d'image\n");
-		return (1);
-	}
+	game->tex_n = load_texture(game->mlx, "textures/north.xpm42");
+	if (game->tex_n == NULL)
+		return (mlx_close_window(game->mlx),1);
+	game->tex_s = load_texture(game->mlx, "textures/south.xpm42");
+	if (game->tex_s == NULL)
+		return (mlx_close_window(game->mlx),1);
+	game->tex_e = load_texture(game->mlx, "textures/east.xpm42");
+	if (game->tex_e == NULL)
+		return (mlx_close_window(game->mlx),1);
+	game->tex_w = load_texture(game->mlx, "textures/west.xpm42");
+	if (game->tex_w == NULL)	
+		return (mlx_close_window(game->mlx),1);
 	return (0);
 }

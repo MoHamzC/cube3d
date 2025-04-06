@@ -15,85 +15,79 @@ static void	clear_image(mlx_image_t *img)
 	}
 }
 
-static void	compute_floor_row(t_game *game, int y, t_floor_dir *fdir,
-	t_floor *fl)
-{
-	int		p;
-	double	pos_z;
-
-	p = y - SCREEN_HEIGHT / 2;
-	pos_z = 0.5 * SCREEN_HEIGHT;
-	fl->row_distance = pos_z / (double)p;
-	fl->floor_step_x = fl->row_distance * (fdir->right_x - fdir->left_x)
-		/ SCREEN_WIDTH;
-	fl->floor_step_y = fl->row_distance * (fdir->right_y - fdir->left_y)
-		/ SCREEN_WIDTH;
-	fl->floor_x = game->pos_x + fl->row_distance * fdir->left_x;
-	fl->floor_y = game->pos_y + fl->row_distance * fdir->left_y;
-}
-
-static void	draw_floor_row(t_game *game, int y, mlx_texture_t *floor_tex,
-		t_floor *fl)
+static void	draw_ceiling(t_game *game)
 {
 	int	x;
-	int	tx;
-	int	ty;
-	int	color;
+	int	y;
+	int	color = game->ceiling_color;
 
-	x = 0;
-	while (x < SCREEN_WIDTH)
+	y = 0;
+	while (y < SCREEN_HEIGHT / 2)
 	{
-		tx = (int)(floor_tex->width
-				* (fl->floor_x - (double)((int)fl->floor_x)))
-			& (floor_tex->width - 1);
-		ty = (int)(floor_tex->height
-				* (fl->floor_y - (double)((int)fl->floor_y)))
-			& (floor_tex->height - 1);
-		color = ((int *)floor_tex->pixels)[ty * floor_tex->width + tx];
-		mlx_put_pixel(game->img, x, y, color);
-		fl->floor_x += fl->floor_step_x;
-		fl->floor_y += fl->floor_step_y;
-		x++;
+		x = 0;
+		while (x < SCREEN_WIDTH)
+		{
+			mlx_put_pixel(game->img, x, y, color);
+			x++;
+		}
+		y++;
 	}
 }
 
-static void	draw_floor_texture(t_game *game, mlx_texture_t *floor_tex)
+static void	draw_floor(t_game *game)
 {
-	t_floor_dir	fdir;
-	int			y;
-	t_floor		fl;
+	int	x;
+	int	y;
+	int	color = game->floor_color;
 
-	fdir.left_x = game->dir_x - game->plane_x;
-	fdir.left_y = game->dir_y - game->plane_y;
-	fdir.right_x = game->dir_x + game->plane_x;
-	fdir.right_y = game->dir_y + game->plane_y;
 	y = SCREEN_HEIGHT / 2;
 	while (y < SCREEN_HEIGHT)
 	{
-		compute_floor_row(game, y, &fdir, &fl);
-		draw_floor_row(game, y, floor_tex, &fl);
+		x = 0;
+		while (x < SCREEN_WIDTH)
+		{
+			mlx_put_pixel(game->img, x, y, color);
+			x++;
+		}
 		y++;
+	}
+}
+mlx_texture_t	*select_wall_texture(t_game *game)
+{
+	if (game->ray.side == 0)
+	{
+		if (game->ray.ray_dir_x > 0)
+			return (game->tex_e);
+		else
+			return (game->tex_w);
+	}
+	else
+	{
+		if (game->ray.ray_dir_y > 0)
+			return (game->tex_s);
+		else
+			return (game->tex_n);
 	}
 }
 
 static void	draw_textured_column(t_game *game, int x, t_column *col,
 		mlx_texture_t *tex)
 {
-	t_tex_draw	d;
+	t_tex_draw d;
+	double	wall_x;
 
 	if (game->ray.side == 0)
-		d.tex_x = (int)(((game->pos_y + game->ray.perp_wall_dist
-						* game->ray.ray_dir_y)
-					- floor(game->pos_y + game->ray.perp_wall_dist
-						* game->ray.ray_dir_y)) * tex->width);
+		wall_x = game->pos_y + game->ray.perp_wall_dist * game->ray.ray_dir_y;
 	else
-		d.tex_x = (int)(((game->pos_x + game->ray.perp_wall_dist
-						* game->ray.ray_dir_x)
-					- floor(game->pos_x + game->ray.perp_wall_dist
-						* game->ray.ray_dir_x)) * tex->width);
+		wall_x = game->pos_x + game->ray.perp_wall_dist * game->ray.ray_dir_x;
+	wall_x = wall_x - floor(wall_x);
+	d.tex_x = (int)(wall_x * tex->width);
+	if ((game->ray.side == 0 && game->ray.ray_dir_x > 0)
+		|| (game->ray.side == 1 && game->ray.ray_dir_y < 0))
+		d.tex_x = tex->width - d.tex_x - 1;
 	d.step = (double)tex->height / (double)game->ray.line_height;
-	d.tex_pos = (col->start - SCREEN_HEIGHT / 2
-			+ game->ray.line_height / 2) * d.step;
+	d.tex_pos = (col->start - SCREEN_HEIGHT / 2 + game->ray.line_height / 2)
+		* d.step;
 	d.y = col->start;
 	while (d.y < col->end)
 	{
@@ -106,22 +100,17 @@ static void	draw_textured_column(t_game *game, int x, t_column *col,
 
 void	draw_scene(t_game *game)
 {
-	int						x;
-	t_column				col;
-	static mlx_texture_t	*wall_texture = NULL;
-	static mlx_texture_t	*floor_texture = NULL;
+	int		x;
+	t_column	col;
 
-	if (!wall_texture)
-		wall_texture = load_texture(game->mlx, "textures/wall.xpm42");
-	if (!floor_texture)
-		floor_texture = load_texture(game->mlx, "textures/floor.xpm42");
 	clear_image(game->img);
-	draw_floor_texture(game, floor_texture);
+	draw_ceiling(game);
+	draw_floor(game);
 	x = 0;
 	while (x < SCREEN_WIDTH)
 	{
 		cast_rays(game, &col.start, &col.end, x);
-		draw_textured_column(game, x, &col, wall_texture);
+		draw_textured_column(game, x, &col, select_wall_texture(game));
 		x++;
 	}
 	mlx_image_to_window(game->mlx, game->img, 0, 0);
