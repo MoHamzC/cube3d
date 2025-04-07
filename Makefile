@@ -1,15 +1,15 @@
-NAME = cube3d
+NAME = cub3d
 
 SRCS =	src/main.c \
-		src/init_game.c \
-		src/free_game.c \
+		src/exec/init_game.c \
+		src/exec/free_game.c \
 		src/graphics/raycasting.c \
 		src/graphics/draw_scene.c \
 		src/graphics/textures.c \
-		src/movements.c \
-		src/rotate.c \
-		src/update.c \
-		src/set_orientation.c \
+		src/exec/movements.c \
+		src/exec/rotate.c \
+		src/exec/update.c \
+		src/exec/set_orientation.c \
 		src/parsing/parsing.c \
 		src/parsing/parsing_utils.c \
 		src/parsing/get_file.c \
