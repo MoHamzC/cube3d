@@ -1,0 +1,12 @@
+# 🛠️ Fichiers objets compilés
+*.o
+
+# 🚀 Exécutables (facultatif, mais recommandé)
+a.out
+*.exe
+
+# ⚙️ Dossier VS Code
+.vscode/
+
+# 📦 Fichiers de debug éventuels
+*.dSYM/

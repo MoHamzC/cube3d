@@ -24,6 +24,7 @@ int	extract_map_from_file(char **file_lines, t_info *info)
 {
 	int map_start;
 	
+	
 	map_start = 0;
 	while (file_lines[map_start])
 	{
@@ -53,6 +54,18 @@ void print_map(char **map) //debugging, will be deleted
 		printf("%s\n", map[i]);
 		i++;
 	}
+}
+
+void	window_resize(int width, int height, void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	game->win_width = width;
+	game->win_height = height;
+	mlx_delete_image(game->mlx, game->img);
+	game->img = mlx_new_image(game->mlx, width, height);
+	draw_scene(game);
 }
 
 int	main(int ac, char **av)
@@ -99,6 +112,7 @@ int	main(int ac, char **av)
 	if (init_game(&game, &info) != 0)
 		return (1);
 	set_player_start(&game);
+	mlx_resize_hook(game.mlx, window_resize, &game);
 	mlx_loop_hook(game.mlx, update, &game);
 	mlx_loop(game.mlx);
 	free_resources(&info);

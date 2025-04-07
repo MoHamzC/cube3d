@@ -1,20 +1,6 @@
 #include "cube3d.h"
 #include <math.h>
 
-static void	clear_image(mlx_image_t *img)
-{
-	int	i;
-	int	total;
-
-	total = img->width * img->height;
-	i = 0;
-	while (i < total)
-	{
-		((int *)img->pixels)[i] = 0;
-		i++;
-	}
-}
-
 static void	draw_ceiling(t_game *game)
 {
 	int	x;
@@ -22,10 +8,10 @@ static void	draw_ceiling(t_game *game)
 	int	color = game->ceiling_color;
 
 	y = 0;
-	while (y < SCREEN_HEIGHT / 2)
+	while (y < game->win_height / 2)
 	{
 		x = 0;
-		while (x < SCREEN_WIDTH)
+		while (x < game->win_width)
 		{
 			mlx_put_pixel(game->img, x, y, color);
 			x++;
@@ -40,11 +26,11 @@ static void	draw_floor(t_game *game)
 	int	y;
 	int	color = game->floor_color;
 
-	y = SCREEN_HEIGHT / 2;
-	while (y < SCREEN_HEIGHT)
+	y = game->win_height / 2;
+	while (y < game->win_height)
 	{
 		x = 0;
-		while (x < SCREEN_WIDTH)
+		while (x < game->win_width)
 		{
 			mlx_put_pixel(game->img, x, y, color);
 			x++;
@@ -86,7 +72,7 @@ static void	draw_textured_column(t_game *game, int x, t_column *col,
 		|| (game->ray.side == 1 && game->ray.ray_dir_y < 0))
 		d.tex_x = tex->width - d.tex_x - 1;
 	d.step = (double)tex->height / (double)game->ray.line_height;
-	d.tex_pos = (col->start - SCREEN_HEIGHT / 2 + game->ray.line_height / 2)
+	d.tex_pos = (col->start - game->win_height / 2 + game->ray.line_height / 2)
 		* d.step;
 	d.y = col->start;
 	while (d.y < col->end)
@@ -103,11 +89,10 @@ void	draw_scene(t_game *game)
 	int		x;
 	t_column	col;
 
-	clear_image(game->img);
 	draw_ceiling(game);
 	draw_floor(game);
 	x = 0;
-	while (x < SCREEN_WIDTH)
+	while (x < game->win_width)
 	{
 		cast_rays(game, &col.start, &col.end, x);
 		draw_textured_column(game, x, &col, select_wall_texture(game));

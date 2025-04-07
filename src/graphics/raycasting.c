@@ -3,7 +3,7 @@
 
 static void	init_ray(t_game *game, int x, t_ray *ray)
 {
-	ray->camera_x = 2 * x / (double)SCREEN_WIDTH - 1;
+	ray->camera_x = 2 * x / (double)game->win_width - 1;
 	ray->ray_dir_x = game->dir_x + game->plane_x * ray->camera_x;
 	ray->ray_dir_y = game->dir_y + game->plane_y * ray->camera_x;
 	ray->map_x = (int)game->pos_x;
@@ -76,12 +76,12 @@ void	cast_rays(t_game *game, int *draw_start, int *draw_end, int x)
 	else
 		ray.perp_wall_dist = (ray.map_y - game->pos_y
 				+ (1 - ray.step_y) / 2.0) / ray.ray_dir_y;
-	ray.line_height = (int)(SCREEN_HEIGHT / ray.perp_wall_dist);
-	*draw_start = -ray.line_height / 2 + SCREEN_HEIGHT / 2;
+	ray.line_height = (int)(game->win_height / ray.perp_wall_dist);
+	*draw_start = -ray.line_height / 2 + game->win_height / 2;
 	if (*draw_start < 0)
 		*draw_start = 0;
-	*draw_end = ray.line_height / 2 + SCREEN_HEIGHT / 2;
-	if (*draw_end >= SCREEN_HEIGHT)
-		*draw_end = SCREEN_HEIGHT - 1;
+	*draw_end = ray.line_height / 2 + game->win_height / 2;
+	if (*draw_end >= game->win_height)
+		*draw_end = game->win_height - 1;
 	game->ray = ray;
 }

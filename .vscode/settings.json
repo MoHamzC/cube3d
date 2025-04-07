@@ -6,6 +6,7 @@
         "__node_handle": "c",
         "cstdint": "c",
         "random": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "math.h": "c"
     }
 }

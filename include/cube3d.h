@@ -102,6 +102,8 @@ void	free_texture(mlx_texture_t *texture);
 void	update(void *param);
 void	move_forward(t_game *game);
 void	move_backward(t_game *game);
+void 	move_left(t_game *game);
+void	move_right(t_game *game);
 void	rotate_left(t_game *game);
 void	rotate_right(t_game *game);
 void	key_handler(mlx_key_data_t keydata, void *param);
