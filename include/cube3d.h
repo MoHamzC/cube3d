@@ -109,4 +109,6 @@ void	rotate_right(t_game *game);
 void	key_handler(mlx_key_data_t keydata, void *param);
 mlx_texture_t	*select_wall_texture(t_game *game);
 void 	set_player_start(t_game *game);
+void	window_resize(int width, int height, void *param);
+
 #endif

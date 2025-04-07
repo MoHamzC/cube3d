@@ -7,6 +7,7 @@ SRCS =	src/main.c \
 		src/graphics/draw_scene.c \
 		src/graphics/textures.c \
 		src/movements.c \
+		src/rotate.c \
 		src/update.c \
 		src/set_orientation.c \
 		src/parsing/parsing.c \

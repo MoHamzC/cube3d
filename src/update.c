@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mochamsa <mochamsa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/07 20:52:28 by mochamsa          #+#    #+#             */
+/*   Updated: 2025/04/07 20:52:47 by mochamsa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cube3d.h"
 #include <stdio.h>
 
@@ -6,7 +18,7 @@ void	update(void *param)
 	t_game	*game;
 
 	game = (t_game *)param;
-	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))                                                                                               
+	if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(game->mlx);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
 		move_forward(game);

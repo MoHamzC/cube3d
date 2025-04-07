@@ -56,18 +56,6 @@ void print_map(char **map) //debugging, will be deleted
 	}
 }
 
-void	window_resize(int width, int height, void *param)
-{
-	t_game	*game;
-
-	game = (t_game *)param;
-	game->win_width = width;
-	game->win_height = height;
-	mlx_delete_image(game->mlx, game->img);
-	game->img = mlx_new_image(game->mlx, width, height);
-	draw_scene(game);
-}
-
 int	main(int ac, char **av)
 {
 	t_game	game;
