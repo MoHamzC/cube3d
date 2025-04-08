@@ -1,4 +1,3 @@
-
 #include "parsing.h"
 
 char	*puttheline(int fd)
@@ -25,24 +24,23 @@ char	*puttheline(int fd)
 char	**get_file(int fd)
 {
 	char	*buffer;
-    char    **map; 
+	char	**map;
+
 	buffer = puttheline(fd);
 	map = ft_split(buffer, '\n');
-    free(buffer);
-    return(map); 
+	free(buffer);
+	return (map);
 }
 
-
-
-void free_map(char **map)
+void	free_map(char **map)
 {
-    int i; 
+	int	i;
 
-    i = 0; 
-    while(map[i])
-    {
-        free(map[i]);
-        i++; 
-    }
-    free(map); 
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
 }
