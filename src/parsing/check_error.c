@@ -1,35 +1,48 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_error.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 21:11:15 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/08 21:12:41 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
-int valid_char(char c)
+int	valid_char(char c)
 {
-	return(c == '0' || c == '1' || c == 'N' || c == 'S'
-		|| c == 'E' || c == 'W' || c == '\n' || (c >= 9 && c <= 13) || c == ' ');
+	return (c == '0' || c == '1' || c == 'N'
+		|| c == 'S' || c == 'E' || c == 'W' || c == '\n'
+		|| (c >= 9 && c <= 13) || c == ' ');
 }
 
-int is_valid_char(char **map, t_info *info)
+int	is_valid_char(char **map, t_info *info)
 {
-	int x; 
-	int y; 
+	int	x;
+	int	y;
 
-	x = 0; 
-	y = 0; 
-	while(map[y])
+	x = 0;
+	y = 0;
+	while (map[y])
 	{
-		x = 0; 
-		while(map[y][x])
+		x = 0;
+		while (map[y][x])
 		{
-			if(!valid_char(map[y][x]))
+			if (!valid_char(map[y][x]))
 			{
 				printf("invalid character in map\n");
-				return(0); 
+				return (0);
 			}
-			x++; 
+			x++;
 		}
 		y++;
 	}
 	info->map_height = y;
 	info->map_width = x;
-	return(1);
+	return (1);
 }
 
 int	is_invalid(char **map, int y, int x)
@@ -43,7 +56,8 @@ int	is_invalid(char **map, int y, int x)
 
 int	is_map_closed(char **map)
 {
-	int	x, y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (map[y])
@@ -83,29 +97,4 @@ int	is_there_a_player(char **map)
 		y++;
 	}
 	return (nb_player == 1);
-}
-
-int	valid_map(char **map, t_info *info)
-{
-	if (!map || !map[0])
-	{
-		fprintf(stderr, "Error\n map is NULL\n");
-		return (0);
-	}
-	if (!is_valid_char(map, info))
-	{
-		fprintf(stderr, "Error\n invalid character in map\n");
-		return (0);
-	}
-	if (!is_map_closed(map))
-	{
-		fprintf(stderr, "Error\n map is not closed\n");
-		return (0);
-	}
-	if (!is_there_a_player(map))
-	{
-		fprintf(stderr, "Error\n must be 1 player in map\n");
-		return (0);
-	}
-	return (1);
 }
