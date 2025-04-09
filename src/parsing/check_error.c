@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:11:15 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/08 21:12:41 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/09 05:28:57 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,27 @@ int	is_invalid(char **map, int y, int x)
 		!map[y][x - 1] || map[y][x - 1] == ' ' ||
 		!map[y][x + 1] || map[y][x + 1] == ' ');
 }
+
+// int	is_empty_line_in_map(char **map)
+// {
+// 	int	i = 0;
+// 	int	found_non_empty = 0;
+
+// 	while (map[i])
+// 	{
+// 		if (is_line_empty(map[i]))
+// 		{
+// 			if (found_non_empty)
+// 			{
+// 				return (0); 
+// 			}
+// 		}
+// 		else
+// 			found_non_empty = 1;
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
 int	is_map_closed(char **map)
 {

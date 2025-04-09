@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:17:35 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/08 23:23:30 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/09 05:31:08 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ int	valid_map(char **map, t_info *info)
 		fprintf(stderr, "Error\n must be 1 player in map\n");
 		return (0);
 	}
+	// if(is_empty_line_in_map(map))
+	// {
+	// 	fprintf(stderr, "Error\n empty line in map\n");
+	// 	return (0);
+	// }
 	return (1);
 }
 
@@ -78,11 +83,10 @@ void	free_resources(t_info *info)
 		free(info->texture.east);
 }
 
-int	parse_file(char **file, t_info *info)
+int parse_file(char **file, t_info *info)
 {
-	int	y;
+	int y = 0;
 
-	y = 0;
 	init_struct(info);
 	while (file[y] && !goteverything(info))
 	{
@@ -91,20 +95,21 @@ int	parse_file(char **file, t_info *info)
 		else if (is_color(file[y]))
 		{
 			if (!get_color(file[y], info))
-				return (fprintf(stderr, "error: invalid color line\n"), 0);
+				return (printf("error: invalid color line\n"), 0);
 			y++;
 		}
 		else if (is_txt(file[y]))
 		{
-			get_txt(file[y], info);
+			if (!get_txt(file[y], info))
+				return (0);
 			y++;
 		}
 		else
-			return (fprintf(stderr, "error: invalid line\n"), 0);
+			return (printf("error: invalid line\n"), 0);
 	}
 	if (!goteverything(info))
 	{
-		fprintf(stderr, "error: missing textures or colors\n");
+		printf("error: missing textures or colors\n");
 		free_resources(info);
 		return (0);
 	}
