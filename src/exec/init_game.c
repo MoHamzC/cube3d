@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mochamsa <mochamsa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:29:52 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/07 20:57:53 by mochamsa         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:25:34 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	window_resize(int width, int height, void *param)
 	game->win_height = height;
 	mlx_delete_image(game->mlx, game->img);
 	game->img = mlx_new_image(game->mlx, width, height);
+	mlx_image_to_window(game->mlx, game->img, 0, 0);
 	draw_scene(game);
 }
 
@@ -35,6 +36,7 @@ int	init_game(t_game *game, t_info *info)
 	game->mlx = mlx_init(game->win_width, game->win_height, "cub3D", true);
 	game->img = mlx_new_image(game->mlx, game->win_width, game->win_height);
 	game->tex_n = load_texture(game->mlx, info->texture.north);
+	mlx_image_to_window(game->mlx, game->img, 0, 0);
 	if (game->tex_n == NULL)
 		return (mlx_close_window(game->mlx), 1);
 	game->tex_s = load_texture(game->mlx, info->texture.south);

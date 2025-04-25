@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mochamsa <mochamsa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 21:36:56 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/07 21:37:12 by mochamsa         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:19:33 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	main(int ac, char **av)
 	if (init_game(&game, &info) != 0)
 		return (1);
 	set_player_start(&game);
+	draw_scene(&game);
 	mlx_resize_hook(game.mlx, window_resize, &game);
 	mlx_loop_hook(game.mlx, update, &game);
 	mlx_loop(game.mlx);

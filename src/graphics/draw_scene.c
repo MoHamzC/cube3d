@@ -6,7 +6,7 @@
 /*   By: mochamsa <mochamsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:54:18 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/07 20:55:37 by mochamsa         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:15:51 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,4 @@ void	draw_scene(t_game *game)
 		draw_textured_column(game, x, &col, select_wall_texture(game));
 		x++;
 	}
-	mlx_image_to_window(game->mlx, game->img, 0, 0);
 }
