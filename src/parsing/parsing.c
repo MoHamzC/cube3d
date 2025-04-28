@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:17:35 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/09 05:31:08 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/28 23:37:07 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ int	valid_map(char **map, t_info *info)
 {
 	if (!map || !map[0])
 	{
-		fprintf(stderr, "Error\n map is NULL\n");
-		return (0);
+		return(fprintf(stderr, "Error\n map is NULL\n"), 0);
 	}
 	if (!is_valid_char(map, info))
 	{
@@ -34,11 +33,11 @@ int	valid_map(char **map, t_info *info)
 		fprintf(stderr, "Error\n must be 1 player in map\n");
 		return (0);
 	}
-	// if(is_empty_line_in_map(map))
-	// {
-	// 	fprintf(stderr, "Error\n empty line in map\n");
-	// 	return (0);
-	// }
+	if(is_empty_line_in_map(map))
+	{
+		fprintf(stderr, "Error\n empty line in map\n");
+		return (0);
+	}
 	return (1);
 }
 
@@ -58,6 +57,7 @@ void	init_struct(t_info *info)
 	info->ceiling.defined = 0;
 	info->map_height = 0;
 	info->map_width = 0;
+	info->map = NULL;
 }
 
 int	goteverything(t_info *info)
@@ -83,35 +83,30 @@ void	free_resources(t_info *info)
 		free(info->texture.east);
 }
 
-int parse_file(char **file, t_info *info)
+int	handle_line(char *line, t_info *info)
 {
-	int y = 0;
+	if (is_line_empty(line))
+		return (1);
+	if (is_color(line))
+		return (get_color(line, info));
+	if (is_txt(line))
+		return (get_txt(line, info));
+	return (0);
+}
 
+int	parse_file(char **file, t_info *info)
+{
+	int	y;
+
+	y = 0;
 	init_struct(info);
 	while (file[y] && !goteverything(info))
 	{
-		if (is_line_empty(file[y]))
-			y++;
-		else if (is_color(file[y]))
-		{
-			if (!get_color(file[y], info))
-				return (printf("error: invalid color line\n"), 0);
-			y++;
-		}
-		else if (is_txt(file[y]))
-		{
-			if (!get_txt(file[y], info))
-				return (0);
-			y++;
-		}
-		else
-			return (printf("error: invalid line\n"), 0);
+		if (!handle_line(file[y], info))
+			return (0); 
+		y++;
 	}
 	if (!goteverything(info))
-	{
-		printf("error: missing textures or colors\n");
-		free_resources(info);
-		return (0);
-	}
+		return (printf("error: missing textures or colors\n"), 0);
 	return (1);
 }

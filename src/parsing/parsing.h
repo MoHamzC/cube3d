@@ -46,7 +46,12 @@ typedef struct s_info
 	t_player	player;		
 }	t_info;
 
+void	remove_newlines_from_map(char **map);
+int	is_invalid(char **map, int y, int x); 
+int	extract_map_from_file(char **file_lines, t_info *info); 
+int	handle_line(char *line, t_info *info);
 int		check_args(int ac, char *av[]);
+int		is_empty_line_in_map(char **map);
 int		is_txt(char *line);
 char	*puttheline(int fd);
 char	**get_file(int fd);
@@ -64,7 +69,6 @@ int		parse_file(char **file, t_info *info);
 char	*get_path(char *line);
 int		is_map_closed(char **map);
 int		is_there_a_player(char **map);
-int		is_line_empty(char *line);
 int		is_map_closed(char **map);
 int		valid_char(char c);
 int		valid_map(char **map, t_info *info);

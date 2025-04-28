@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:58:53 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/09 05:18:11 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/28 23:37:09 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@ int	is_line_empty(char *line)
 {
 	while (*line)
 	{
-		if (!(*line == ' ' || (*line >= 9 && *line <= 13)))
-			return (0);
+		if (*line != '\n')
+		{
+			if (!(*line == ' ' || (*line >= 9 && *line <= 13)))
+				return (0);
+		}
 		line++;
 	}
 	return (1);
