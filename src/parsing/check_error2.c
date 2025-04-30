@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 23:45:56 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/29 00:50:43 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 00:26:24 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,7 @@ int	is_valid_char(char **map, t_info *info)
 		while (map[y][x])
 		{
 			if (!valid_char(map[y][x]))
-			{
-				printf("invalid character in map\n");
 				return (0);
-			}
 			x++;
 		}
 		y++;

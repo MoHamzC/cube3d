@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:23:46 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/29 23:01:08 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 01:06:57 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ void	free_map(char **map)
 	int	i;
 
 	i = 0;
+	if (!map)
+		return ;
 	while (map[i])
 	{
 		free(map[i]);

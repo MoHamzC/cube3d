@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 21:36:56 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/29 22:35:45 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 01:48:30 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ void	init_info_and_file(t_info *info, char ***file, int ac, char **av)
 
 void	parse_and_init_game(t_game *game, t_info *info, char **file)
 {
+	game->map = info->map;
 	if (init_game(game, info) != 0)
 		exit_error(info, file, "Game initialization failed");
-	game->map = info->map;
 	set_player_start(game);
 }
 
@@ -87,6 +87,7 @@ int	main(int ac, char **av)
 	t_info	info;
 	char	**file;
 
+	ft_memset(&game, 0, sizeof(t_game));
 	init_info_and_file(&info, &file, ac, av);
 	parse_and_init_game(&game, &info, file);
 	draw_scene(&game);

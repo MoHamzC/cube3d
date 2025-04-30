@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 22:59:47 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/30 22:59:51 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 00:14:22 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct s_game
 }				t_game;
 
 int				init_game(t_game *game, t_info *info);
+uint32_t		get_texture_color(mlx_texture_t *tex, int x, int y);
 void			free_game(t_game *game);
 void			draw_scene(t_game *game);
 void			cast_rays(t_game *game, int *draw_start, int *draw_end, int x);

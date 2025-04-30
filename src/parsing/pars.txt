@@ -1,0 +1,739 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_error2.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/28 23:45:56 by mtarento          #+#    #+#             */
+/*   Updated: 2025/05/01 00:26:24 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+int	valid_char(char c)
+{
+	return (c == '0' || c == '1' || c == 'N'
+		|| c == 'S' || c == 'E' || c == 'W' || c == '\n'
+		|| (c >= 9 && c <= 13) || c == ' ');
+}
+
+int	is_empty_line_in_map(char **map)
+{
+	int	i;
+	int	started;
+
+	i = 0;
+	started = 0;
+	while (map[i])
+	{
+		if (is_line_empty(map[i]))
+		{
+			if (started)
+				return (1);
+		}
+		else
+			started = 1;
+		i++;
+	}
+	return (0);
+}
+
+int	is_valid_char(char **map, t_info *info)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (!valid_char(map[y][x]))
+				return (0);
+			x++;
+		}
+		y++;
+	}
+	info->map_height = y;
+	info->map_width = x;
+	return (1);
+}
+
+int	is_invalid(char **map, int y, int x)
+{
+	if (!map[y] || (int)ft_strlen(map[y]) <= x)
+		return (1);
+	if (!map[y + 1] || (int)ft_strlen(map[y + 1]) <= x
+		|| map[y + 1][x] == ' ' || map[y + 1][x] == '\n')
+		return (1);
+	if (y == 0 || !map[y - 1] || (int)ft_strlen(map[y - 1]) <= x
+		|| map[y - 1][x] == ' ' || map[y - 1][x] == '\n')
+		return (1);
+	if (x == 0 || !map[y][x - 1] || map[y][x - 1] == ' '
+		|| map[y][x - 1] == '\n')
+		return (1);
+	if (!map[y][x + 1] || map[y][x + 1] == ' '
+		|| map[y][x + 1] == '\n')
+		return (1);
+	return (0);
+}
+
+int	valid_map(char **map, t_info *info)
+{
+	if (!map || !map[0])
+		return (fprintf(stderr, "Error\n map is NULL\n"), 0);
+	if (!is_valid_char(map, info))
+	{
+		fprintf(stderr, "Error\n invalid character in map\n");
+		return (0);
+	}
+	if (!is_map_closed(map))
+	{
+		fprintf(stderr, "Error\n map is not closed\n");
+		return (0);
+	}
+	if (!is_there_a_player(map))
+	{
+		fprintf(stderr, "Error\n must be 1 player in map\n");
+		return (0);
+	}
+	if (is_empty_line_in_map(map))
+	{
+		fprintf(stderr, "Error\n empty line in map\n");
+		return (0);
+	}
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_error.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 21:11:15 by mtarento          #+#    #+#             */
+/*   Updated: 2025/05/01 00:30:56 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+int	check_args(int ac, char *av[])
+{
+	int	len;
+
+	if (ac != 2)
+		return (printf("Error: wrong number of arguments\n"), 1);
+	len = ft_strlen(av[1]);
+	if (len < 4 || ft_strncmp(&av[1][len - 4], ".cub", 4) != 0)
+		return (printf("Error: not a .cub file\n"), 1);
+	return (0);
+}
+
+int	is_map_closed(char **map)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] != '\n' && map[y][x] != '1' && map[y][x] != ' ')
+			{
+				if (is_invalid(map, y, x))
+					return (0);
+			}
+			x++;
+		}
+		y++;
+	}
+	return (1);
+}
+
+int	is_there_a_player(char **map)
+{
+	int	x;
+	int	y;
+	int	nb_player;
+
+	y = 0;
+	nb_player = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] != '\n')
+			{
+				if (map[y][x] == 'N' || map[y][x] == 'S' ||
+					map[y][x] == 'E' || map[y][x] == 'W')
+					nb_player++;
+			}
+			x++;
+		}
+		y++;
+	}
+	return (nb_player == 1);
+}
+
+int	exit_error(t_info *info, char **file, const char *msg)
+{
+	if (msg)
+		fprintf(stderr, "Error\n%s\n", msg);
+	if (file)
+		free_map(file);
+	if (info)
+	{
+		if (info->map)
+			free_map(info->map);
+		free_resources(info);
+	}
+	exit(1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_color.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 00:13:20 by mtarento          #+#    #+#             */
+/*   Updated: 2025/05/01 00:13:31 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+char	**parse_color_line(char *line)
+{
+	char	*clean;
+	char	**split;
+
+	clean = ft_strtrim(line, " \n\t\r\v\f");
+	if (!clean)
+		return (NULL);
+	split = ft_split(clean, ',');
+	free(clean);
+	if (!split || !split[0] || !split[1] || !split[2] || split[3])
+	{
+		free_split(split);
+		printf("Error: invalid RGB format\n");
+		return (NULL);
+	}
+	if (!is_digit_str_trimmed(split[0])
+		|| !is_digit_str_trimmed(split[1]) || !is_digit_str_trimmed(split[2]))
+	{
+		free_split(split);
+		printf("Error: invalid RGB number\n");
+		return (NULL);
+	}
+	return (split);
+}
+
+int	fill_color(t_color *color, char **split)
+{
+	color->r = ft_atoi(split[0]);
+	color->g = ft_atoi(split[1]);
+	color->b = ft_atoi(split[2]);
+	if (color->r < 0 || color->r > 255 || color->g < 0 || color->g > 255
+		|| color->b < 0 || color->b > 255)
+	{
+		printf("Error: color value must be between 0 and 255\n");
+		return (0);
+	}
+	color->defined = 1;
+	color->hex = rgb_to_hex(color->r, color->g, color->b);
+	return (1);
+}
+
+int	get_color(char *line, t_info *info)
+{
+	t_color	*color;
+	char	**split;
+
+	if (line[0] == 'F')
+		color = &info->floor;
+	else
+		color = &info->ceiling;
+	line += 2;
+	while (*line == ' ')
+		line++;
+	split = parse_color_line(line);
+	if (!split)
+		return (0);
+	if (!fill_color(color, split))
+		return (free_split(split), 0);
+	free_split(split);
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_file.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 23:23:46 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/29 23:01:08 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+char	**ft_realloc(char **old, int old_size, int new_size)
+{
+	char	**new;
+	int		i;
+
+	new = malloc(sizeof(char *) * (new_size + 1));
+	if (!new)
+		return (NULL);
+	i = 0;
+	while (i < old_size)
+	{
+		new[i] = old[i];
+		i++;
+	}
+	new[i] = NULL;
+	free(old);
+	return (new);
+}
+
+char	*puttheline(int fd)
+{
+	char	*line;
+	char	*buffer;
+	char	*temp;
+
+	buffer = ft_strdup("");
+	line = get_next_line(fd);
+	while (line)
+	{
+		temp = ft_strjoin(buffer, line);
+		free(buffer);
+		buffer = temp;
+		free(line);
+		if (!buffer)
+			handle_memory_error();
+		line = get_next_line(fd);
+	}
+	return (buffer);
+}
+
+char	**get_file(int fd)
+{
+	char	**map;
+	char	*line;
+	int		size;
+
+	size = 0;
+	map = malloc(sizeof(char *) * 1);
+	if (!map)
+		handle_memory_error();
+	map[0] = NULL;
+	line = get_next_line(fd);
+	while (line)
+	{
+		map = ft_realloc(map, size, size + 1);
+		if (!map)
+			handle_memory_error();
+		map[size] = line;
+		map[size + 1] = NULL;
+		size++;
+		line = get_next_line(fd);
+	}
+	return (map);
+}
+
+void	remove_newlines_from_map(char **map)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == '\n')
+				map[y][x] = '\0';
+			x++;
+		}
+		y++;
+	}
+}
+
+void	free_map(char **map)
+{
+	int	i;
+
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_stuff.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/09 01:02:10 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/30 22:49:33 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+char	*get_path(char *line)
+{
+	char	*trimmed;
+	char	*path;
+
+	while (*line == ' ')
+		line++;
+	trimmed = ft_strtrim(line, " \n\t\r\v\f");
+	if (!trimmed)
+		return (NULL);
+	if (trimmed[0] == '\0')
+	{
+		printf("Error:\n empty path\n");
+		free(trimmed);
+		return (NULL);
+	}
+	path = ft_strdup(trimmed);
+	free(trimmed);
+	return (path);
+}
+
+int	is_digit_str_trimmed(char *s)
+{
+	while (*s == ' ')
+		s++;
+	if (*s == '\0')
+		return (0);
+	while (*s)
+	{
+		if (*s < '0' || *s > '9')
+			return (0);
+		s++;
+	}
+	return (1);
+}
+
+int	set_texture(char **texture, char *path, char *msg)
+{
+	if (*texture)
+		return (printf("%s", msg), 0);
+	*texture = path;
+	return (1);
+}
+
+int	get_txt(char *line, t_info *info)
+{
+	if (!line)
+		return (0);
+	if (ft_strncmp(line, "NO ", 3) == 0)
+		return (set_texture(&info->texture.north, get_path(line + 2),
+				"Error: repeat texture for NO\n"));
+	if (ft_strncmp(line, "SO ", 3) == 0)
+		return (set_texture(&info->texture.south, get_path(line + 2),
+				"Error: repeat texture for SO\n"));
+	if (ft_strncmp(line, "WE ", 3) == 0)
+		return (set_texture(&info->texture.west, get_path(line + 2),
+				"Error: repeat texture for WE\n"));
+	if (ft_strncmp(line, "EA ", 3) == 0)
+		return (set_texture(&info->texture.east, get_path(line + 2),
+				"Error: repeat texture for EA\n"));
+	return (printf("Error: invalid texture line\n"), 0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   identify_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 20:58:53 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/28 23:37:09 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+int	is_line_empty(char *line)
+{
+	while (*line)
+	{
+		if (*line != '\n')
+		{
+			if (!(*line == ' ' || (*line >= 9 && *line <= 13)))
+				return (0);
+		}
+		line++;
+	}
+	return (1);
+}
+
+int	is_txt(char *line)
+{
+	return (ft_strncmp(line, "NO ", 3) == 0
+		|| ft_strncmp(line, "SO ", 3) == 0
+		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0);
+}
+
+int	is_color(char *line)
+{
+	return (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 21:17:35 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/29 19:44:18 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+void	init_struct(t_info *info)
+{
+	info->texture.north = NULL;
+	info->texture.south = NULL;
+	info->texture.east = NULL;
+	info->texture.west = NULL;
+	info->floor.r = -1;
+	info->floor.g = -1;
+	info->floor.b = -1;
+	info->floor.defined = 0;
+	info->ceiling.r = -1;
+	info->ceiling.g = -1;
+	info->ceiling.b = -1;
+	info->ceiling.defined = 0;
+	info->map_height = 0;
+	info->map_width = 0;
+	info->map = NULL;
+}
+
+int	goteverything(t_info *info)
+{
+	if (info->texture.north && info->texture.south
+		&& info->texture.west && info->texture.east
+		&& info->floor.defined && info->ceiling.defined)
+	{
+		return (1);
+	}
+	return (0);
+}
+
+void	free_resources(t_info *info)
+{
+	if (info->texture.north)
+		free(info->texture.north);
+	if (info->texture.south)
+		free(info->texture.south);
+	if (info->texture.west)
+		free(info->texture.west);
+	if (info->texture.east)
+		free(info->texture.east);
+}
+
+int	handle_line(char *line, t_info *info)
+{
+	if (is_line_empty(line))
+		return (1);
+	if (is_color(line))
+		return (get_color(line, info));
+	if (is_txt(line))
+		return (get_txt(line, info));
+	return (0);
+}
+
+int	parse_file(char **file, t_info *info)
+{
+	int	y;
+
+	y = 0;
+	init_struct(info);
+	while (file[y] && !goteverything(info))
+	{
+		if (!handle_line(file[y], info))
+			return (0);
+		y++;
+	}
+	if (!goteverything(info))
+		return (printf("error: missing textures or colors\n"), 0);
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 00:26:06 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/29 01:17:39 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#pragma once
+
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <string.h>
+
+#include "libft/libft.h"
+#include "getnextline/get_next_line.h"
+
+typedef struct s_texture
+{
+	char	*north;
+	char	*south;
+	char	*east;
+	char	*west;
+}	t_texture;
+
+typedef struct s_color
+{
+	int	r;
+	int	g;
+	int	b;
+	int	hex;
+	int	defined;
+}	t_color;
+
+typedef struct s_player
+{
+	int		x;
+	int		y;
+	char	dir;
+}	t_player;
+
+typedef struct s_info
+{
+	t_texture	texture;	
+	t_color		floor;		
+	t_color		ceiling;	
+	char		**map;		
+	int			map_height;
+	int			map_width;
+	t_player	player;		
+}	t_info;
+
+void	remove_newlines_from_map(char **map);
+int		exit_error(t_info *info, char **file, const char *msg);
+int		count_map_lines(char **file_lines, int start);
+int		is_invalid(char **map, int y, int x);
+int		is_digit_str_trimmed(char *s);
+int		extract_map_from_file(char **file_lines, t_info *info);
+int		handle_line(char *line, t_info *info);
+int		check_args(int ac, char *av[]);
+int		is_empty_line_in_map(char **map);
+int		is_txt(char *line);
+char	*puttheline(int fd);
+char	**get_file(int fd);
+void	free_map(char **map);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		is_digit_str(char *s);
+void	handle_memory_error(void);
+int		is_line_empty(char *line);
+int		is_color(char *line);
+int		get_color(char *line, t_info *info);
+int		get_txt(char *line, t_info *info);
+int		goteverything(t_info *info);
+void	free_resources(t_info *info);
+int		parse_file(char **file, t_info *info);
+char	*get_path(char *line);
+int		is_map_closed(char **map);
+int		is_there_a_player(char **map);
+int		is_map_closed(char **map);
+int		valid_char(char c);
+int		valid_map(char **map, t_info *info);
+int		is_valid_char(char **map, t_info *info);
+int		rgb_to_hex(int r, int g, int b);
+void	init_struct(t_info *info);
+int		extract_map_from_file(char **file_lines, t_info *info);
+void	free_split(char **split);
+char	*trim_spaces(char *s);/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 21:20:38 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/29 19:49:47 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n && s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	if (i == n)
+		return (0);
+	return (s1[i] - s2[i]);
+}
+
+int	rgb_to_hex(int r, int g, int b)
+{
+	return ((r << 24) | (g << 16) | (b << 8) | 0xFF);
+}
+
+void	handle_memory_error(void)
+{
+	printf("Error\n malloc problem !!!\n");
+	return ;
+}
+
+int	is_digit_str(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (!ft_isdigit(s[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+		free(split[i++]);
+	free(split);
+}

@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:29:52 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/30 22:50:03 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 01:54:50 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,28 @@ void	window_resize(int width, int height, void *param)
 	draw_scene(game);
 }
 
+void	free_everything(t_game *game, t_info *info)
+{
+	if (game->tex_n)
+		free_texture(game->tex_n);
+	if (game->tex_s)
+		free_texture(game->tex_s);
+	if (game->tex_e)
+		free_texture(game->tex_e);
+	if (game->tex_w)
+		free_texture(game->tex_w);
+	if (game->img)
+		mlx_delete_image(game->mlx, game->img);
+	if (game->mlx)
+		mlx_terminate(game->mlx);
+	if (info)
+	{
+		free_resources(info);
+		free_map(info->map);
+	}
+	exit(1);
+}
+
 int	init_game(t_game *game, t_info *info)
 {
 	game->move_speed = 0.05;
@@ -38,15 +60,15 @@ int	init_game(t_game *game, t_info *info)
 	game->tex_n = mlx_load_png(info->texture.north);
 	mlx_image_to_window(game->mlx, game->img, 0, 0);
 	if (game->tex_n == NULL)
-		return (mlx_close_window(game->mlx), 1);
+		return (free_everything(game, info), 1);
 	game->tex_s = mlx_load_png(info->texture.south);
 	if (game->tex_s == NULL)
-		return (mlx_close_window(game->mlx), 1);
+		return (free_everything(game, info), 1);
 	game->tex_e = mlx_load_png(info->texture.east);
 	if (game->tex_e == NULL)
-		return (mlx_close_window(game->mlx), 1);
+		return (free_everything(game, info), 1);
 	game->tex_w = mlx_load_png(info->texture.west);
 	if (game->tex_w == NULL)
-		return (mlx_close_window(game->mlx), 1);
+		return (free_everything(game, info), 1);
 	return (0);
 }

@@ -25,13 +25,14 @@ SRCS =	src/main.c \
 		include/libft/ft_strtrim.c \
 		include/libft/ft_strlcpy.c \
 		include/libft/ft_strlcat.c \
+		include/libft/ft_memset.c \
 		include/getnextline/get_next_line.c \
 		include/getnextline/get_next_line_utils.c
 
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iinclude -I../mlx/include
+CFLAGS = -Wall -Wextra -Werror -Iinclude -I../mlx/include -g
 MLXFLAGS = -L../mlx/build -lmlx42 -lXext -lX11 -lm -lglfw
 
 all: $(NAME)

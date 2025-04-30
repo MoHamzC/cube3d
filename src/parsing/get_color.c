@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 00:13:20 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/30 23:09:35 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 00:13:31 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	fill_color(t_color *color, char **split)
 		printf("Error: color value must be between 0 and 255\n");
 		return (0);
 	}
-	color->defined = 1; 
+	color->defined = 1;
 	color->hex = rgb_to_hex(color->r, color->g, color->b);
 	return (1);
 }
