@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 21:36:56 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/05/01 01:48:30 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 01:57:09 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	main(int ac, char **av)
 	mlx_loop(game.mlx);
 	free_resources(&info);
 	free_map(file);
+	free_map(info.map);
 	free_game(&game);
 	return (0);
 }
