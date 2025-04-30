@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 17:09:21 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/04 02:32:11 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:32:27 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-
 
 typedef struct s_list
 {

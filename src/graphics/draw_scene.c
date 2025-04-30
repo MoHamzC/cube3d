@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_scene.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mochamsa <mochamsa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:54:18 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/25 23:15:51 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/30 23:08:08 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,22 @@ mlx_texture_t	*select_wall_texture(t_game *game)
 	}
 }
 
+uint32_t	get_texture_color(mlx_texture_t *tex, int x, int y)
+{
+	int	i;
+
+	i = (y * tex->width + x) * 4;
+	return (tex->pixels[i + 0] << 24
+		| tex->pixels[i + 1] << 16
+		| tex->pixels[i + 2] << 8
+		| tex->pixels[i + 3]);
+}
+
 static void	draw_textured_column(t_game *game, int x, t_column *col,
 		mlx_texture_t *tex)
 {
 	t_tex_draw	d;
+	uint32_t	color;
 	double		wall_x;
 
 	if (game->ray.side == 0)
@@ -92,8 +104,8 @@ static void	draw_textured_column(t_game *game, int x, t_column *col,
 	d.y = col->start;
 	while (d.y < col->end)
 	{
-		mlx_put_pixel(game->img, x, d.y, ((int *)tex->pixels)[tex->width
-			* (((int)d.tex_pos) % tex->height) + d.tex_x]);
+		color = get_texture_color(tex, d.tex_x, ((int)d.tex_pos) % tex->height);
+		mlx_put_pixel(game->img, x, d.y, color);
 		d.tex_pos += d.step;
 		d.y++;
 	}

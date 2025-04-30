@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cube3d.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/30 22:59:47 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/30 22:59:51 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUBE3D_H
 # define CUBE3D_H
 
@@ -69,20 +81,20 @@ typedef struct s_tex_draw
 
 typedef struct s_game
 {
-	double		pos_x;
-	double		pos_y;
-	double		dir_x;
-	double		dir_y;
-	double		plane_x;
-	double		plane_y;
-	double		move_speed;
-	double		rot_speed;
-	char		**map;
-	mlx_t		*mlx;
-	mlx_image_t	*img;
-	int         win_width;
-    int         win_height;
-	t_ray		ray;  
+	double			pos_x;
+	double			pos_y;
+	double			dir_x;
+	double			dir_y;
+	double			plane_x;
+	double			plane_y;
+	double			move_speed;
+	double			rot_speed;
+	char			**map;
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	int				win_width;
+	int				win_height;
+	t_ray			ray;
 	mlx_texture_t	*tex_n;
 	mlx_texture_t	*tex_s;
 	mlx_texture_t	*tex_e;
@@ -91,24 +103,23 @@ typedef struct s_game
 	int				ceiling_color;
 }				t_game;
 
-/* Prototypes */
-int		init_game(t_game *game, t_info *info);
-void	free_game(t_game *game);
-void	draw_scene(t_game *game);
-void	cast_rays(t_game *game, int *draw_start, int *draw_end, int x);
-char	**parse_cub(const char *filename);
+int				init_game(t_game *game, t_info *info);
+void			free_game(t_game *game);
+void			draw_scene(t_game *game);
+void			cast_rays(t_game *game, int *draw_start, int *draw_end, int x);
+char			**parse_cub(const char *filename);
 mlx_texture_t	*load_texture(mlx_t *mlx, char *path);
-void	free_texture(mlx_texture_t *texture);
-void	update(void *param);
-void	move_forward(t_game *game);
-void	move_backward(t_game *game);
-void 	move_left(t_game *game);
-void	move_right(t_game *game);
-void	rotate_left(t_game *game);
-void	rotate_right(t_game *game);
-void	key_handler(mlx_key_data_t keydata, void *param);
+void			free_texture(mlx_texture_t *texture);
+void			update(void *param);
+void			move_forward(t_game *game);
+void			move_backward(t_game *game);
+void			move_left(t_game *game);
+void			move_right(t_game *game);
+void			rotate_left(t_game *game);
+void			rotate_right(t_game *game);
+void			key_handler(mlx_key_data_t keydata, void *param);
 mlx_texture_t	*select_wall_texture(t_game *game);
-void 	set_player_start(t_game *game);
-void	window_resize(int width, int height, void *param);
+void			set_player_start(t_game *game);
+void			window_resize(int width, int height, void *param);
 
 #endif

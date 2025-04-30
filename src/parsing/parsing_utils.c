@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:20:38 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/28 23:37:08 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:49:47 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 
 int	rgb_to_hex(int r, int g, int b)
 {
-	return ((r << 16) | (g << 8) | b);
+	return ((r << 24) | (g << 16) | (b << 8) | 0xFF);
 }
 
 void	handle_memory_error(void)

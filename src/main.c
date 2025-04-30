@@ -6,40 +6,21 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 21:36:56 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/28 23:37:26 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:35:45 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "cube3d.h"
 #include "parsing.h"
 
-int	exit_error(t_info *info, char **file, const char *msg)
+int	count_map_lines(char **file_lines, int start)
 {
-	if (msg)
-		fprintf(stderr, "Error\n%s\n", msg);
-	if (file)
-		free_map(file);
-	if (info)
-	{
-		if (info->map)
-			free_map(info->map);   
-		free_resources(info);
-	}
-	exit(1);
-}
+	int	count;
 
-
-int	check_args(int ac, char *av[])
-{
-	int	len;
-
-	if (ac != 2)
-		return (printf("Error: wrong number of arguments\n"), 1);
-	len = ft_strlen(av[1]);
-	if (len < 4 || ft_strncmp(&av[1][len - 4], ".cub", 4) != 0)
-		return (printf("Error: not a .cub file\n"), 1);
-	return (0);
+	count = 0;
+	while (file_lines[start + count])
+		count++;
+	return (count);
 }
 
 int	extract_map_from_file(char **file_lines, t_info *info)
@@ -49,17 +30,12 @@ int	extract_map_from_file(char **file_lines, t_info *info)
 	int	i;
 
 	start = 0;
-	while (file_lines[start] && (is_line_empty(file_lines[start]) || is_color(file_lines[start]) || is_txt(file_lines[start])))
+	while (file_lines[start] && (is_line_empty(file_lines[start])
+			|| is_color(file_lines[start]) || is_txt(file_lines[start])))
 		start++;
 	if (!file_lines[start])
 		return (0);
-	count = 0;
-	i = start;
-	while (file_lines[i])
-	{
-		count++;
-		i++;
-	}
+	count = count_map_lines(file_lines, start);
 	info->map = malloc(sizeof(char *) * (count + 1));
 	if (!info->map)
 		return (0);
@@ -75,33 +51,44 @@ int	extract_map_from_file(char **file_lines, t_info *info)
 	return (1);
 }
 
+void	init_info_and_file(t_info *info, char ***file, int ac, char **av)
+{
+	int	fd;
+
+	if (check_args(ac, av))
+		exit(1);
+	fd = open(av[1], O_RDONLY);
+	if (fd == -1)
+		exit_error(NULL, NULL, "Opening file failed");
+	*file = get_file(fd);
+	close(fd);
+	if (!*file)
+		exit_error(NULL, NULL, "Could not read file");
+	if (!parse_file(*file, info))
+		exit_error(info, *file, NULL);
+	if (!extract_map_from_file(*file, info))
+		exit_error(info, *file, "Extracting map failed");
+	remove_newlines_from_map(info->map);
+	if (!valid_map(info->map, info))
+		exit_error(info, *file, NULL);
+}
+
+void	parse_and_init_game(t_game *game, t_info *info, char **file)
+{
+	if (init_game(game, info) != 0)
+		exit_error(info, file, "Game initialization failed");
+	game->map = info->map;
+	set_player_start(game);
+}
+
 int	main(int ac, char **av)
 {
 	t_game	game;
 	t_info	info;
 	char	**file;
-	int		fd;
 
-	if (check_args(ac, av))
-		return (1);
-	fd = open(av[1], O_RDONLY);
-	if (fd == -1)
-		exit_error(NULL, NULL, "Opening file failed");
-	file = get_file(fd);
-	close(fd);
-	if (!file)
-		exit_error(NULL, NULL, "Could not read file");
-	if (!parse_file(file, &info))
-		exit_error(&info, file, NULL);
-	if (!extract_map_from_file(file, &info))
-		exit_error(&info, file, "Extracting map failed");
-	remove_newlines_from_map(info.map);
-	if (!valid_map(info.map, &info))
-		exit_error(&info, file, NULL);
-	if (init_game(&game, &info) != 0)
-		exit_error(&info, file, "Game initialization failed");
-	game.map = info.map;
-	set_player_start(&game);
+	init_info_and_file(&info, &file, ac, av);
+	parse_and_init_game(&game, &info, file);
 	draw_scene(&game);
 	mlx_resize_hook(game.mlx, window_resize, &game);
 	mlx_loop_hook(game.mlx, update, &game);
@@ -111,3 +98,40 @@ int	main(int ac, char **av)
 	free_game(&game);
 	return (0);
 }
+
+// int	main(int ac, char **av)
+// {
+// 	t_game	game;
+// 	t_info	info;
+// 	char	**file;
+// 	int		fd;
+
+// 	if (check_args(ac, av))
+// 		return (1);
+// 	fd = open(av[1], O_RDONLY);
+// 	if (fd == -1)
+// 		exit_error(NULL, NULL, "Opening file failed");
+// 	file = get_file(fd);
+// 	close(fd);
+// 	if (!file)
+// 		exit_error(NULL, NULL, "Could not read file");
+// 	if (!parse_file(file, &info))
+// 		exit_error(&info, file, NULL);
+// 	if (!extract_map_from_file(file, &info))
+// 		exit_error(&info, file, "Extracting map failed");
+// 	remove_newlines_from_map(info.map);
+// 	if (!valid_map(info.map, &info))
+// 		exit_error(&info, file, NULL);
+// 	if (init_game(&game, &info) != 0)
+// 		exit_error(&info, file, "Game initialization failed");
+// 	game.map = info.map;
+// 	set_player_start(&game);
+// 	draw_scene(&game);
+// 	mlx_resize_hook(game.mlx, window_resize, &game);
+// 	mlx_loop_hook(game.mlx, update, &game);
+// 	mlx_loop(game.mlx);
+// 	free_resources(&info);
+// 	free_map(file);
+// 	free_game(&game);
+// 	return (0);
+// }

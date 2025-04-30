@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mochamsa <mochamsa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:54:08 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/07 20:54:09 by mochamsa         ###   ########.fr       */
+/*   Updated: 2025/04/30 23:07:34 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ mlx_texture_t	*load_texture(mlx_t *mlx, char *path)
 	texture = (mlx_texture_t *)mlx_load_xpm42(path);
 	if (!texture)
 	{
-		printf("Erreur de chargement de la texture: %s\n", path);
-		exit(EXIT_FAILURE);
+		printf("Error: \n loading texture %s\n", path);
+		exit(EXIT_FAILURE); //FREEE ICI
 	}
 	return (texture);
 }

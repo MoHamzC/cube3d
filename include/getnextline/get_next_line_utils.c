@@ -6,12 +6,13 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 17:18:29 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/07 00:05:58 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:33:06 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "../libft/libft.h"
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;

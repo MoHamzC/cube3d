@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/30 23:00:26 by mtarento          #+#    #+#             */
+/*   Updated: 2025/04/30 23:01:32 by mtarento         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #pragma once
 
 #include <unistd.h>
@@ -5,10 +17,8 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <string.h>
-
-# include "libft/libft.h"
-# include "getnextline/get_next_line.h"
-
+#include "libft/libft.h"
+#include "getnextline/get_next_line.h"
 
 typedef struct s_texture
 {
@@ -18,21 +28,20 @@ typedef struct s_texture
 	char	*west;
 }	t_texture;
 
-
 typedef struct s_color
 {
 	int	r;
 	int	g;
 	int	b;
 	int	hex;
-	int	defined; 
+	int	defined;
 }	t_color;
 
 typedef struct s_player
 {
 	int		x;
 	int		y;
-	char	dir; 
+	char	dir;
 }	t_player;
 
 typedef struct s_info
@@ -47,10 +56,11 @@ typedef struct s_info
 }	t_info;
 
 void	remove_newlines_from_map(char **map);
+int		exit_error(t_info *info, char **file, const char *msg);
 int		check_args(int ac, char *av[]);
 int		is_empty_line_in_map(char **map);
 int		is_txt(char *line);
-int	handle_line(char *line, t_info *info);
+int		handle_line(char *line, t_info *info);
 char	*puttheline(int fd);
 char	**get_file(int fd);
 void	free_map(char **map);
@@ -76,5 +86,5 @@ void	init_struct(t_info *info);
 int		extract_map_from_file(char **file_lines, t_info *info);
 void	free_split(char **split);
 char	*trim_spaces(char *s);
-int	extract_map_from_file(char **file_lines, t_info *info); 
-// int	is_empty_line_in_map(char **map);
+int		extract_map_from_file(char **file_lines, t_info *info);
+int		is_digit_str_trimmed(char *s);

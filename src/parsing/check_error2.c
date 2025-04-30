@@ -6,10 +6,9 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 23:45:56 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/28 23:51:32 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/29 00:50:43 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "parsing.h"
 
@@ -20,25 +19,25 @@ int	valid_char(char c)
 		|| (c >= 9 && c <= 13) || c == ' ');
 }
 
-int is_empty_line_in_map(char **map)
+int	is_empty_line_in_map(char **map)
 {
-	int i;
-	int found_non_empty;
+	int	i;
+	int	started;
 
 	i = 0;
-	found_non_empty = 0;
+	started = 0;
 	while (map[i])
 	{
 		if (is_line_empty(map[i]))
 		{
-			if (found_non_empty)
-				return (1); 
+			if (started)
+				return (1);
 		}
 		else
-			found_non_empty = 1;
+			started = 1;
 		i++;
 	}
-	return (0); 
+	return (0);
 }
 
 int	is_valid_char(char **map, t_info *info)
@@ -71,17 +70,44 @@ int	is_invalid(char **map, int y, int x)
 {
 	if (!map[y] || (int)ft_strlen(map[y]) <= x)
 		return (1);
-	if (!map[y + 1] || (int)ft_strlen(map[y + 1]) <= x ||
-		map[y + 1][x] == ' ' || map[y + 1][x] == '\n')
+	if (!map[y + 1] || (int)ft_strlen(map[y + 1]) <= x
+		|| map[y + 1][x] == ' ' || map[y + 1][x] == '\n')
 		return (1);
-	if (y == 0 || !map[y - 1] || (int)ft_strlen(map[y - 1]) <= x ||
-		map[y - 1][x] == ' ' || map[y - 1][x] == '\n')
+	if (y == 0 || !map[y - 1] || (int)ft_strlen(map[y - 1]) <= x
+		|| map[y - 1][x] == ' ' || map[y - 1][x] == '\n')
 		return (1);
-	if (x == 0 || !map[y][x - 1] || map[y][x - 1] == ' ' ||
-		map[y][x - 1] == '\n')
+	if (x == 0 || !map[y][x - 1] || map[y][x - 1] == ' '
+		|| map[y][x - 1] == '\n')
 		return (1);
-	if (!map[y][x + 1] || map[y][x + 1] == ' ' ||
-		map[y][x + 1] == '\n')
+	if (!map[y][x + 1] || map[y][x + 1] == ' '
+		|| map[y][x + 1] == '\n')
 		return (1);
 	return (0);
+}
+
+int	valid_map(char **map, t_info *info)
+{
+	if (!map || !map[0])
+		return (fprintf(stderr, "Error\n map is NULL\n"), 0);
+	if (!is_valid_char(map, info))
+	{
+		fprintf(stderr, "Error\n invalid character in map\n");
+		return (0);
+	}
+	if (!is_map_closed(map))
+	{
+		fprintf(stderr, "Error\n map is not closed\n");
+		return (0);
+	}
+	if (!is_there_a_player(map))
+	{
+		fprintf(stderr, "Error\n must be 1 player in map\n");
+		return (0);
+	}
+	if (is_empty_line_in_map(map))
+	{
+		fprintf(stderr, "Error\n empty line in map\n");
+		return (0);
+	}
+	return (1);
 }

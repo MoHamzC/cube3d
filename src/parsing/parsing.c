@@ -6,40 +6,11 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:17:35 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/28 23:37:07 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:44:18 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-int	valid_map(char **map, t_info *info)
-{
-	if (!map || !map[0])
-	{
-		return(fprintf(stderr, "Error\n map is NULL\n"), 0);
-	}
-	if (!is_valid_char(map, info))
-	{
-		fprintf(stderr, "Error\n invalid character in map\n");
-		return (0);
-	}
-	if (!is_map_closed(map))
-	{
-		fprintf(stderr, "Error\n map is not closed\n");
-		return (0);
-	}
-	if (!is_there_a_player(map))
-	{
-		fprintf(stderr, "Error\n must be 1 player in map\n");
-		return (0);
-	}
-	if(is_empty_line_in_map(map))
-	{
-		fprintf(stderr, "Error\n empty line in map\n");
-		return (0);
-	}
-	return (1);
-}
 
 void	init_struct(t_info *info)
 {
@@ -103,7 +74,7 @@ int	parse_file(char **file, t_info *info)
 	while (file[y] && !goteverything(info))
 	{
 		if (!handle_line(file[y], info))
-			return (0); 
+			return (0);
 		y++;
 	}
 	if (!goteverything(info))

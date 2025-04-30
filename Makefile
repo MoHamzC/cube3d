@@ -14,6 +14,7 @@ SRCS =	src/main.c \
 		src/parsing/parsing.c \
 		src/parsing/parsing_utils.c \
 		src/parsing/get_stuff.c \
+		src/parsing/get_color.c \
 		src/parsing/identify_line.c \
 		src/parsing/check_error.c \
 		src/parsing/check_error2.c \

@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:29:52 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/04/25 23:25:34 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/04/30 22:50:03 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,17 @@ int	init_game(t_game *game, t_info *info)
 	game->ceiling_color = info->ceiling.hex;
 	game->mlx = mlx_init(game->win_width, game->win_height, "cub3D", true);
 	game->img = mlx_new_image(game->mlx, game->win_width, game->win_height);
-	game->tex_n = load_texture(game->mlx, info->texture.north);
+	game->tex_n = mlx_load_png(info->texture.north);
 	mlx_image_to_window(game->mlx, game->img, 0, 0);
 	if (game->tex_n == NULL)
 		return (mlx_close_window(game->mlx), 1);
-	game->tex_s = load_texture(game->mlx, info->texture.south);
+	game->tex_s = mlx_load_png(info->texture.south);
 	if (game->tex_s == NULL)
 		return (mlx_close_window(game->mlx), 1);
-	game->tex_e = load_texture(game->mlx, info->texture.east);
+	game->tex_e = mlx_load_png(info->texture.east);
 	if (game->tex_e == NULL)
 		return (mlx_close_window(game->mlx), 1);
-	game->tex_w = load_texture(game->mlx, info->texture.west);
+	game->tex_w = mlx_load_png(info->texture.west);
 	if (game->tex_w == NULL)
 		return (mlx_close_window(game->mlx), 1);
 	return (0);
