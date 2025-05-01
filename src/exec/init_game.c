@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:29:52 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/05/01 01:54:50 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 02:16:59 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	free_everything(t_game *game, t_info *info)
 		free_resources(info);
 		free_map(info->map);
 	}
+	printf("Error: %s\n", "wrong texture");
 	exit(1);
 }
 

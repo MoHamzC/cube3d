@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:17:35 by mtarento          #+#    #+#             */
-/*   Updated: 2025/04/29 19:44:18 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 02:02:21 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	handle_line(char *line, t_info *info)
 		return (get_color(line, info));
 	if (is_txt(line))
 		return (get_txt(line, info));
+	printf("Error: invalid line: %s\n", line);
 	return (0);
 }
 

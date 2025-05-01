@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 21:36:56 by mochamsa          #+#    #+#             */
-/*   Updated: 2025/05/01 01:57:09 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 02:13:30 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,9 @@ void	init_info_and_file(t_info *info, char ***file, int ac, char **av)
 void	parse_and_init_game(t_game *game, t_info *info, char **file)
 {
 	game->map = info->map;
+	free_map(file);
 	if (init_game(game, info) != 0)
-		exit_error(info, file, "Game initialization failed");
+		exit_error(info, NULL, "Game initialization failed");
 	set_player_start(game);
 }
 
@@ -95,7 +96,6 @@ int	main(int ac, char **av)
 	mlx_loop_hook(game.mlx, update, &game);
 	mlx_loop(game.mlx);
 	free_resources(&info);
-	free_map(file);
 	free_map(info.map);
 	free_game(&game);
 	return (0);

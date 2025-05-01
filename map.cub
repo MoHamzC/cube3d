@@ -6,7 +6,7 @@
 
 
 
-NO ./textures/wall3.png
+NO ./textures/wall3.pngg
 SO ./textures/wall1.png
 WE ./textures/wall2.png
 EA                       ./textures/wall.png
