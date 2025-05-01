@@ -6,7 +6,7 @@
 /*   By: mtarento <mtarento@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 00:13:20 by mtarento          #+#    #+#             */
-/*   Updated: 2025/05/01 00:13:31 by mtarento         ###   ########.fr       */
+/*   Updated: 2025/05/01 02:43:46 by mtarento         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,17 @@ int	get_color(char *line, t_info *info)
 	char	**split;
 
 	if (line[0] == 'F')
+	{
+		if (info->floor.defined)
+			return(printf("Error: floor color already defined\n"), 0);
 		color = &info->floor;
-	else
+	}
+	else if (line[0] == 'C')
+	{
+		if (info->ceiling.defined)
+			return(printf("Error: ceiling color already defined\n"), 0);
 		color = &info->ceiling;
+	}
 	line += 2;
 	while (*line == ' ')
 		line++;

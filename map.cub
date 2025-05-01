@@ -6,7 +6,7 @@
 
 
 
-NO ./textures/wall3.pngg
+NO ./textures/wall3.png
 SO ./textures/wall1.png
 WE ./textures/wall2.png
 EA                       ./textures/wall.png
@@ -16,6 +16,7 @@ EA                       ./textures/wall.png
 
 
 
+F          200, 100, 0
 F          200, 100, 0
 
 
